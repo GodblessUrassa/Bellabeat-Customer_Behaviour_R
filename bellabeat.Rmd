@@ -1,0 +1,338 @@
+---
+title: "Bellabeat Customer Behaviour Analysis"
+output:
+  html_document: default
+  pdf_document: default
+date: "2023-04-12"
+---
+
+## Scenario
+
+You are a junior data analyst working on the marketing analyst team at Bellabeat, a high-tech manufacturer of health-focused products for women. Bellabeat is a successful small company, but they have the potential to become a larger player in the global smart device market. Urška Sršen, cofounder and Chief Creative Officer of Bellabeat, believes that analyzing smart device fitness data could help unlock new growth opportunities for the company. You have been asked to focus on one of Bellabeat’s products and analyze smart device data to gain insight into how consumers are using their smart devices. The insights you discover will then help guide marketing strategy for the company. You will present your analysis to the Bellabeat executive team along with your high-level recommendations for Bellabeat’s marketing strategy.
+
+## Project Task
+
+Sršen asks you to analyze smart device usage data in order to gain insight into how consumers use non-Bellabeat smart devices. She then wants you to select one Bellabeat product to apply these insights to in your presentation. Sršen encourages you to use public data that explores smart device users’ daily habits. 
+She points you to a specific data set. FitBit Fitness Tracker Data (CC0: Public Domain, dataset made available through Mobius)
+This Kaggle data set contains personal fitness tracker from thirty fitbit users. Thirty eligible Fitbit users consented to the submission of personal tracker data, including minute-level output for physical activity, heart rate, and sleep monitoring. It includes information about daily activity, steps, and heart rate that can be used to explore users’ habits.
+
+**Guiding Questions**
+
+1. What are some trends in smart device usage?
+2. How could these trends apply to Bellabeat customers?
+3. How could these trends help influence Bellabeat marketing strategy?
+
+## Loading libraries
+```{r}
+library(tidyverse)
+library(readr)
+library(lubridate)
+library(ggplot2)
+```
+
+## Data importation
+
+_I used daily activity and daily sleep tables. This tables have information concerning activity and sleep data which are also collected by bellabeat products._
+
+```{r}
+Activity_df <- read.csv("C:\\Users\\gbless7\\Downloads\\fitbit fitness data\\Fitabase Data 4.12.16-5.12.16\\dailyActivity_merged.csv")
+
+Sleep_df <- read.csv("C:\\Users\\gbless7\\Downloads\\fitbit fitness data\\Fitabase Data 4.12.16-5.12.16\\sleepDay_merged.csv")
+
+Weight_df <- read.csv("C:\\Users\\gbless7\\Downloads\\fitbit fitness data\\Fitabase Data 4.12.16-5.12.16\\weightLogInfo_merged.csv")
+```
+
+```{r}
+head(Activity_df)
+head(Sleep_df)
+head(Weight_df)
+```
+
+## Data Cleaning
+
+#### Activity Table
+
+**number of columns**
+```{r number of columns available in activity table}
+colnames(Activity_df)
+```
+
+**Data structure**
+```{r structure of activity table}
+str(Activity_df)
+```
+
+_Activity date has character data type instead of date type_
+
+**Detecting Duplicates**
+```{r}
+duplicates <- Activity_df[duplicated(Activity_df), ]
+duplicates
+```
+
+_There are no duplicates_
+
+**Distinct users**
+```{r}
+Distinct_users <- Activity_df %>% 
+  distinct(Id)
+count(Distinct_users)
+```
+
+_there are 33 users for the product recording activity data_
+
+#### Sleep Table
+
+**number of columns**
+```{r columns available in sleep table}
+colnames(Sleep_df)
+```
+
+**table structure**
+```{r structure of sleep table}
+str(Sleep_df)
+```
+
+_sleep day variable has character data type instead of date type_
+
+**Detecting duplicates**
+```{r}
+duplicates <- Sleep_df[duplicated(Sleep_df), ]
+duplicates
+```
+
+_There are 3 duplicates_
+
+#### Weight Data
+
+**number of columns**
+```{r}
+colnames(Weight_df)
+```
+
+**Data structure**
+```{r}
+str(Weight_df)
+```
+
+_Date field has character data type instead of date type_
+
+**Detecting duplicates**
+```{r}
+duplicates_wt <- Weight_df[duplicated(Weight_df),]
+duplicates_wt
+```
+
+_there are no duplicates_
+
+Changing activity date data type to date type and renaming the column
+```{r}
+Date_1 <- as.Date(Activity_df$ActivityDate, format = "%m/%d/%y")
+
+Activity <- Activity_df %>% 
+  rename(Date=ActivityDate) %>% 
+  mutate(Date=Date_1) 
+head(Activity)
+```
+
+Change sleep date data type and renaming sleep day
+```{r}
+Date_1 <- as.Date(Sleep_df$SleepDay, format = "%m/%d/%y")
+
+Sleep_1 <- Sleep_df %>% 
+  rename(Date=SleepDay) %>% 
+  mutate(Date=Date_1)
+head(Sleep_1)
+```
+
+changing weight date type
+```{r}
+Date_wt <- as.Date(Weight_df$Date, format = "%m/%d/%y")
+
+Wt_df <- Weight_df %>% 
+  mutate(Date=Date_wt)
+head(Wt_df)
+```
+
+Removing duplicates
+```{r}
+sleep_unique <- distinct(Sleep_1)
+head(sleep_unique)
+```
+
+## Data Summarization
+
+```{r distribution of activity data}
+summary(Activity_df)
+```
+
+**box plot to visualize distribution of total steps, tracker distance, and minutes activity levels**
+
+```{r}
+par(mfrow=c(1,3))
+boxplot(Activity_df$TotalSteps, ylab='Total steps')
+
+boxplot(Activity_df$TrackerDistance, ylab='Tracker distance')
+
+boxplot(Activity_df$VeryActiveMinutes,Activity_df$FairlyActiveMinutes,Activity_df$LightlyActiveMinutes,Activity_df$SedentaryMinutes, ylab='Activity level minutes')
+```
+
+_Total steps has outliers and data is skewed right, meaning many users take steps below 10,000 per day_
+
+_Tracker distance has outliers and data is skewed right, meaning many users walk short distances_
+
+_There are few users that have active distance in very active minutes and fairly active minutes because of small range compared to users in lightly active minutes and sedentary active minutes_
+
+_Individuals in sedentary active minutes have skewed to left meaning many individuals are less active_
+
+**distribution of sleep data**
+```{r}
+summary(Sleep_df)
+```
+
+**Box plot to visualize distribution of total minutes asleep and total time in bed**
+```{r}
+par(mfrow=c(1,1))
+boxplot(Sleep_df$TotalMinutesAsleep,Sleep_df$TotalTimeInBed,ylab='minutes asleep/in bed')
+```
+
+_The distribution of time spent asleep is normal but there are outliers_
+
+_Time spent in bed also has normal distribution but with outliers_
+
+_The time spent by users in bed is approximately the same with those spending asleep_
+
+**Distribution of selected weight fields**
+```{r}
+Wt_df %>% 
+  select(WeightKg) %>% 
+  summary()
+```
+
+**box plot to visualize distribution**
+```{r}
+par(mfrow=c(1,1))
+boxplot(Wt_df$WeightKg, ylan="weight")
+```
+
+_there is an outlier, it will be deleted_
+
+```{r}
+wt <- subset(Wt_df, Id != "1927972279")
+head(wt)
+```
+
+**recheck the outlier**
+```{r}
+wt %>% 
+  select(WeightKg) %>% 
+  summary()
+```
+
+_there is large variation in weights of individuals_
+
+## Data transformation
+
+_creating new activity table with summarized variables. for example customer Id '1503960366' took 12207 steps in each day_
+
+```{r}
+activity_new <- Activity %>% 
+  group_by(Id) %>% 
+  summarize(Days=as.numeric(max(Date)-min(Date)),Steps=median(TotalSteps),Distance=median(TrackerDistance),ActiveDistance=median(VeryActiveDistance),InactiveDistance=mean(SedentaryActiveDistance),ActiveMinutes=median(VeryActiveMinutes),InactiveMinutes=median(SedentaryMinutes),BurnedCalories=median(Calories)
+)
+head(activity_new)
+```
+
+_also creating new sleep table with summarized variables_
+```{r}
+sleep_new <- sleep_unique %>% 
+  group_by(Id) %>% 
+  summarize(Days=as.numeric(max(Date)-min(Date)),No_of_Sleeps=median(TotalSleepRecords), MinutesAsleep=median(TotalMinutesAsleep),MinutesInBed=median(TotalTimeInBed))
+head(sleep_new)
+```
+
+_Joining sleep table and activity table_
+```{r}
+activity_sleep <- inner_join(sleep_new,activity_new,by="Id")
+head(activity_sleep)
+```
+
+_joining weight table and activity table_
+```{r}
+wt_ac <- merge(wt, Activity, by=c("Id","Date"))
+wt_ac
+```
+
+## Data Visualization
+
+**Correlation between distance covered and time spent during sleeping**
+```{r}
+ggplot(data = activity_sleep, aes(x=Distance, y=MinutesAsleep))+geom_point()+geom_smooth(na.rm = TRUE)
+```
+
+**correlation coefficient between distance and time spent sleeping**
+```{r}
+coeff <- cor(x=activity_sleep$Distance, y=activity_sleep$MinutesAsleep)
+coeff
+```
+
+_There is negative correlation, that means the less steps are taken the more time is spent sleeping_
+
+**correlation between burnt calories and time spent sleeping**
+```{r}
+ggplot(data = activity_sleep, aes(x=MinutesAsleep, y=BurnedCalories))+geom_point()+geom_smooth(na.rm = TRUE)
+```
+
+**correlation coefficient between burnt calories and time spent sleeping**
+```{r}
+coeff_ <- cor(x=activity_sleep$MinutesAsleep, y=activity_sleep$BurnedCalories)
+coeff_
+```
+
+_There is negative correlation, meaning the more time is spent sleeping the less calories are burnt_
+
+**correlation between distance covered and calories burnt**
+```{r}
+ggplot(data = activity_sleep, aes(x=Distance, y=BurnedCalories))+geom_point()+geom_smooth(na.rm = TRUE)
+```
+
+**correlation coefficient**
+```{r}
+coeff_i <- cor(x=activity_sleep$Distance, y=activity_sleep$BurnedCalories)
+coeff_i
+```
+
+_There is positive correlation, that means the more distance is covered, the more calories are burnt_
+
+**correlation between weight and sedentary minutes**
+```{r}
+ggplot(data = wt_ac, aes(x=WeightKg, y=SedentaryMinutes))+geom_point()+geom_smooth()
+```
+
+**coefficient between weight and sedentary minutes**
+```{r}
+cor_wt <- cor(wt_ac$WeightKg,wt_ac$SedentaryMinutes)
+cor_wt
+```
+
+_there is strong positive correlation between weight and sedentary minutes_
+
+## Trends and Patterns
+
+* Many users walk short distances that are not intense
+* Many users spend most of their time sleeping and in bed
+* Customers who spend more time sleeping burn less calories
+* Customers covering short distances tend to sleep more 
+* Customers Covering long distances tend to burn more calories
+* Customers who have large weight tend to spend more time sitting/lying while engaging in activities
+
+## Recommendation
+* The marketing team in bellabeat should come up with a campaign and tell customers that being inactive tends to increase body fats
+* Monitoring their body weight they should use bellabeat products
+
+
+  
+
+
+
+
