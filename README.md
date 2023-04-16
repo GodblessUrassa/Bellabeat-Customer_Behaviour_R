@@ -7,6 +7,19 @@ You are a junior data analyst working on the marketing analyst team at Bellabeat
 To analyze smart device usage data from non-Bellabeat smart devices in order to gain insight into how consumers use them.
 
 ## Data Source
-![](https://www.kaggle.com/datasets/arashnic/fitbit)FitBit Fitness Tracker Data (CC0: Public Domain, dataset made available through Mobius). This Kaggle data set contains personal fitness tracker from thirty fitbit users. Thirty eligible Fitbit users consented to the submission of personal tracker data, including minute-level output for physical activity, heart rate, and sleep monitoring. It includes information about daily activity, steps, and heart rate that can be used to explore users’ habits.
+[FitBit Fitness Tracker Data](https://www.kaggle.com/datasets/arashnic/fitbit). (CC0: Public Domain, dataset made available through Mobius). This Kaggle data set contains personal fitness tracker from thirty fitbit users. Thirty eligible Fitbit users consented to the submission of personal tracker data, including minute-level output for physical activity, heart rate, and sleep monitoring. It includes information about daily activity, steps, and heart rate that can be used to explore users’ habits.
 
+## Analysis
+For detailed analysis of the project click ![here](bellabeat.Rmd)
 
+## Insights
+* Many users walk short distances that are not intense
+* Many users spend most of their time sleeping and in bed
+* Customers who spend more time sleeping burn less calories
+* Customers covering short distances tend to sleep more 
+* Customers Covering long distances tend to burn more calories
+* Customers who have large weight tend to spend more time sitting/lying while engaging in activities
+
+## Recommendations
+* The marketing team in bellabeat should come up with a campaign and tell customers the effects being inactive
+* In monitoring their body weight they should use bellabeat products
