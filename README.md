@@ -20,6 +20,9 @@ For detailed analysis of the project click [here](bellabeat.Rmd) and for the pro
 * Customers Covering long distances tend to burn more calories
 * Customers who have large weight tend to spend more time sitting/lying while engaging in activities
 
+## Conclusion
+* The analysis shows that customers who have this smart-devices don't use them to solve their intended problems. Maybe the devices are fulfilling customers desires
+
 ## Recommendations
-* The marketing team in bellabeat should come up with a campaign and tell customers the effects of being inactive
-* In monitoring their body weight they should use bellabeat products
+* The marketing team in bellabeat should do market research to know what features smart-devices should have to fulfill customers desire  
+* A further analysis should be done to know what was the cause for customers to not engage with the devices
