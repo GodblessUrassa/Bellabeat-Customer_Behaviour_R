@@ -21,7 +21,7 @@ For detailed analysis of the project click [here](bellabeat.Rmd) and for the pro
 * Customers who have large weight tend to spend more time sitting/lying while engaging in activities
 
 ## Conclusion
-* The analysis shows that customers who have this smart-devices don't use them to solve their intended problems. Maybe the devices are fulfilling customers desires
+* The analysis shows that customers who have this smart-devices don't use them to solve their intended problems. Maybe the devices are not fulfilling customer desires
 
 ## Recommendations
 * The marketing team in bellabeat should do market research to know what features smart-devices should have to fulfill customers desire  
