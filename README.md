@@ -15,14 +15,15 @@ For detailed analysis of the project click [here](bellabeat.Rmd) and for the pro
 ## Insights
 * Many users walk short distances that are not intense
 * Many users spend most of their time sleeping and in bed
-* Customers who spend more time sleeping burn less calories
+* Customers who spend more time sleeping burn fewer calories
 * Customers covering short distances tend to sleep more 
 * Customers Covering long distances tend to burn more calories
 * Customers who have large weight tend to spend more time sitting/lying while engaging in activities
 
 ## Conclusion
-* The analysis shows that customers who have this smart-devices don't use them to solve their intended problems. Maybe the devices are not fulfilling customer desires
+* The analysis shows that customers with these smart devices don't use them to solve their intended problems. Maybe the devices are not fulfilling customer desires
+* From the analysis, there is an opportunity for Bellabeat products to prosper in the market
 
 ## Recommendations
-* The marketing team in bellabeat should do market research to know what features smart-devices should have to fulfill customers desire  
+* The marketing team in Bellabeat should do market research to know what features smart devices should have to fulfill customers' desire  
 * A further analysis should be done to know what was the cause for customers to not engage with the devices
